@@ -71,11 +71,20 @@ public class Menu extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
 
-        JPanel wrapper = new JPanel();
+        JPanel wrapper = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g){
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                Color translucentBlack = new Color(0,0,0,100);
+                g2d.setColor(translucentBlack);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+                g2d.dispose();
+            }
+        };
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
         wrapper.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 40));
         wrapper.setOpaque(true);
-        wrapper.setBackground(new Color(0,0,0));
         wrapper.setAlignmentY(Component.TOP_ALIGNMENT);
         wrapper.setPreferredSize(new Dimension((int) (getWidth() * 0.25), (int) (getHeight() * 0.5)));
 

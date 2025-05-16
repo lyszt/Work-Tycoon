@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 public class Menu extends JFrame {
@@ -16,6 +17,7 @@ public class Menu extends JFrame {
         // Gets the size dynamically, 70% of user screen
         StartMainFrame();
         MakeGameTitle();
+        AddQuitButton();
         this.setVisible(true);
     }
     public void SetScreenSize(){
@@ -49,5 +51,12 @@ public class Menu extends JFrame {
         titlePanel.setOpaque(false);
         this.add(titlePanel, BorderLayout.NORTH);
 
+    }
+    public void AddQuitButton(){
+        JButton quit = new JButton("Sair do jogo");
+        quit.setHorizontalTextPosition(SwingConstants.CENTER);
+        quit.addActionListener(ActionListener -> System.exit(0));
+        // quit.setSize((int) (screenW * 0.1), (int) (screenH * 0.15));
+        this.add(quit);
     }
 }

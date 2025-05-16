@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class Menu extends JFrame {
     int screenW;
@@ -17,7 +19,8 @@ public class Menu extends JFrame {
         // Gets the size dynamically, 70% of user screen
         StartMainFrame();
         MakeGameTitle();
-        AddQuitButton();
+        AddMenuButtons();
+
         this.setVisible(true);
     }
     public void SetScreenSize(){
@@ -29,14 +32,14 @@ public class Menu extends JFrame {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.getContentPane().setBackground(new Color(206, 84, 84));
+        this.getContentPane().setBackground(new Color(70, 70, 70));
 
     }
     public void MakeGameTitle(){
         JLabel title = new JLabel();
         ImageIcon logo = new ImageIcon("resources/images/workonomia.png");
 
-        int optimalWidth = (int) (this.getWidth() * 0.5);
+        int optimalWidth = (int) (this.getWidth() * 0.3);
         int optimalHeight = (int) (this.getHeight() * ((double) optimalWidth / logo.getIconWidth()) * 0.5);
         Image scaledLogo = logo.getImage().getScaledInstance(optimalWidth, optimalHeight, Image.SCALE_SMOOTH);
         ImageIcon scaledLogoIcon = new ImageIcon(scaledLogo);
@@ -45,18 +48,45 @@ public class Menu extends JFrame {
         title.setIcon(scaledLogoIcon);
         title.setHorizontalTextPosition(SwingConstants.CENTER);
 
-        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(30,0,30,0));
+        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(30,30,30,0));
         titlePanel.add(title);
         titlePanel.setOpaque(false);
         this.add(titlePanel, BorderLayout.NORTH);
 
     }
-    public void AddQuitButton(){
+    public void AddMenuButtons(){
+        JButton start = new JButton("Iniciar");
+        JButton options = new JButton("Opções");
         JButton quit = new JButton("Sair do jogo");
         quit.setHorizontalTextPosition(SwingConstants.CENTER);
         quit.addActionListener(ActionListener -> System.exit(0));
         // quit.setSize((int) (screenW * 0.1), (int) (screenH * 0.15));
-        this.add(quit);
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JButton[] buttons = {start, options, quit};
+        JPanel wrapper = new JPanel();
+
+        wrapper.setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        wrapper.setOpaque(false);
+        wrapper.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 30));
+        wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
+        Dimension maxSize = Arrays.stream(buttons)
+                .map(AbstractButton::getPreferredSize)
+                .max(Comparator.comparingInt(d -> d.width))
+                .orElse(new Dimension(0, 0));
+
+        Arrays.stream(buttons).toList().forEach(b -> b.setMaximumSize(new Dimension(maxSize.width, maxSize.height)));
+        for(JButton button : buttons) {
+            button.setAlignmentX(Component.RIGHT_ALIGNMENT);
+            wrapper.add(button);
+            wrapper.add(Box.createVerticalStrut(10));
+        }
+
+        wrapper.setOpaque(false);
+        panel.add(wrapper);
+
+        panel.setOpaque(false);
+        this.add(panel);
     }
 }

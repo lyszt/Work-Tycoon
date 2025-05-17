@@ -42,7 +42,7 @@ public class Menu extends JFrame {
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.getContentPane().setBackground(new Color(70, 70, 70));
+        this.getContentPane().setBackground(new Color(100, 255, 190));
 
 
     }

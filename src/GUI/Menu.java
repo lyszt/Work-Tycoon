@@ -21,15 +21,19 @@ public class Menu extends JFrame {
 
         JPanel container = new JPanel(new BorderLayout());
         container.setOpaque(false);
-        container.add(MakeGameTitle(), BorderLayout.NORTH);
+        container.add(MakeGameTitle(), BorderLayout.WEST);
         container.add(AddMenuButtons(), BorderLayout.CENTER);
-
+        // Empty panel on top
+        JPanel topPannel = new JPanel();
+        topPannel.setOpaque(false);
+        topPannel.setPreferredSize(new Dimension((int) (getWidth()), (int) (getHeight() * 0.2)));
+        this.add(topPannel, BorderLayout.NORTH);
         this.add(container, BorderLayout.CENTER);
         this.setVisible(true);
     }
 
     public void SetScreenSize(){
-        this.setSize((int) (screenW * 0.4), (int) (screenH * 0.5));
+        this.setSize(1024,600);
     }
 
     public void StartMainFrame(){
@@ -39,6 +43,8 @@ public class Menu extends JFrame {
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setBackground(new Color(70, 70, 70));
+
+
     }
 
     public JPanel MakeGameTitle(){
@@ -62,11 +68,50 @@ public class Menu extends JFrame {
     }
 
     public JPanel AddMenuButtons(){
-        JButton start = new JButton("Iniciar");
-        JButton options = new JButton("Opções");
-        JButton quit = new JButton("Sair do jogo");
+        ImageIcon start_image = new ImageIcon("resources/buttons/start.png");
+        ImageIcon options_image = new ImageIcon("resources/buttons/options.png");
+        ImageIcon leave_image = new ImageIcon("resources/buttons/leave.png");
+
+        ImageIcon start_pressed = new ImageIcon("resources/buttons/start_pressed.png");
+        ImageIcon options_pressed = new ImageIcon("resources/buttons/options_pressed.png");
+        ImageIcon leave_pressed = new ImageIcon("resources/buttons/leave_pressed.png");
+
+        JButton start = new JButton(start_image);
+        JButton options = new JButton(options_image);
+        JButton quit = new JButton(leave_image);
+        JButton[] buttons = {start, options, quit};
+
+        Arrays.stream(buttons).toList().forEach(b -> b.setBounds(50, 50, start_image.getIconWidth(), start_image.getIconHeight()));
+        Arrays.stream(buttons).toList().forEach(b -> b.setBorderPainted(false));
+        Arrays.stream(buttons).toList().forEach(b -> b.setFocusPainted(false));
+        Arrays.stream(buttons).toList().forEach(b -> b.setContentAreaFilled(false));
+
+
         quit.setHorizontalTextPosition(SwingConstants.CENTER);
-        quit.addActionListener(ActionListener -> System.exit(0));
+        start.addActionListener(e -> {
+            start.setIcon(start_pressed);
+
+            Timer timer = new Timer(100, evt -> {
+                start.setIcon(start_image);
+            });
+            timer.setRepeats(false);
+            timer.start();
+        });
+
+        options.addActionListener(e -> {
+            options.setIcon(options_pressed);
+
+            Timer timer = new Timer(100, evt -> {
+                options.setIcon(options_image);
+            });
+            timer.setRepeats(false);
+            timer.start();
+        });
+
+        quit.addActionListener(e -> {
+            System.exit(0);
+
+        });
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
@@ -83,12 +128,11 @@ public class Menu extends JFrame {
             }
         };
         wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
-        wrapper.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 40));
+        wrapper.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 50));
         wrapper.setOpaque(true);
         wrapper.setAlignmentY(Component.TOP_ALIGNMENT);
-        wrapper.setPreferredSize(new Dimension((int) (getWidth() * 0.25), (int) (getHeight() * 0.5)));
+        wrapper.setPreferredSize(new Dimension((int) (getWidth() * 0.2), (int) (getHeight() * 0.6)));
 
-        JButton[] buttons = {start, options, quit};
         Dimension maxSize = Arrays.stream(buttons)
                 .map(AbstractButton::getPreferredSize)
                 .max(Comparator.comparingInt(d -> d.width))
